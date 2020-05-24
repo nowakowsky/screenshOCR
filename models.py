@@ -1,6 +1,7 @@
 from PIL import ImageGrab, Image
 from datetime import datetime
 from sys import exit
+import logging
 import os
 
 from pyautogui import position
@@ -56,9 +57,9 @@ class screenshoter:
                 if self.separator:
                     mark = "#" * 10
                     f.write("\n\n\n" + mark + " END OF IMAGE " + mark + "\n\n\n")
-                print ("Text saved")
+                logging.info("Text saved")
             else:
-                print ("Skipping, image repeated")
+                logging.info("Skipping, image repeated")
 
     def start_files(self):
         #read files from dir
@@ -83,6 +84,6 @@ class screenshoter:
                         mark = "#" * 10
                         f.write( "\n\n\n" + mark + " END OF IMAGE " + mark + "\n\n\n")
                     os.remove(filename) #image used by ocr
-                    print ("Text saved")
+                    logging.info("Text saved")
                 else:
-                    print ("Skipping, image repeated")
+                    logging.info("Skipping, image repeated")

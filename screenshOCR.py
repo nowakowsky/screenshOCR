@@ -1,6 +1,7 @@
 from models import screenshoter
 from time import sleep
 import argparse
+import logging
 
 ap = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epilog='''\n
     This software has been made to automate taking screenshot and OCRing to text file.
@@ -38,13 +39,13 @@ def run(mode: bool, path: str, ocr_path: str, output_file: str, lang: str, inter
     else:
         try:
             if width == 0 or heigth == 0:
-                raise Exception("-c is required for files mode")
+                raise Exception("Option -c is required for files mode")
             else:
                 app = screenshoter(top_left_x=top_left_x, top_left_y=top_left_y, width=width, heigth=heigth, path=path, ocr_path=ocr_path, lang=lang, output_file=output_file, delete=delete, separator=separator)
                 app.start_files()
                 exit(0)
         except Exception as e:
-            print (e)
+            logging.critical(e)
             exit(1)
 
 mode = args['mode']
