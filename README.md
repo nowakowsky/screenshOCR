@@ -10,8 +10,6 @@
     
     screenshOCR.py -m 1 -c 0 0 300 300
         OCR all files from .\\images\\ 300x300 square starting from upper left corner of each image
-
-### screenshotOCR.py -h 
+    
+    screenshotOCR.py -h 
         for all available options
-
-
