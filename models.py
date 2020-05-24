@@ -12,7 +12,7 @@ import cv2
 class screenshoter:
     last_image_sum = 0
 
-    def __init__(self, output_file, ocr_path, path, lang, a=0, b=0, c=0, d=0 ):
+    def __init__(self, output_file: str, ocr_path: str, path: str, lang: str, a: int=0, b: int=0, c: int=0, d: int=0 ):
         if c == 0 or d == 0: #screenshot mode
             input("Set mouse cursor on upper left corner and press enter")
             self.a, self.b = position()
@@ -27,7 +27,7 @@ class screenshoter:
         self.lang=lang
 
     def _takeScreenshot(self):
-        filename=str(datetime.now().strftime("%d_%m_%H_%M_%S"))
+        filename = f'{datetime.now():%d_%m_%H_%M_%S}_tmp.png'
         im = ImageGrab.grab(bbox=(self.a,self.b,self.c,self.d))
         file_with_path = self.path + filename + ".png"
         im.save(file_with_path)
@@ -35,11 +35,13 @@ class screenshoter:
 
     def read(self):
         with open(self.output_file, "a",encoding='utf8') as f:
-            filename=str(datetime.now().strftime("%d_%m_%H_%M_%S"))+'tmp.png'
+            filename = f'{datetime.now():%d_%m_%H_%M_%S}_tmp.png'
             screenshot = self._takeScreenshot()
             image = cv2.imread(screenshot)
-            if np.sum(image) != self.last_image_sum: 
-                self.last_image_sum = np.sum(image)
+            image_sum = np.sum(image)
+            
+            if image_sum != self.last_image_sum: 
+                self.last_image_sum = image_sum
                 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
                 cv2.imwrite(filename, gray)
@@ -62,8 +64,9 @@ class screenshoter:
                 image = image[self.b:self.d, self.a:self.c]
                 filename=str(datetime.now().strftime("%d_%m_%H_%M_%S"))+'tmp.png'
 
-                if np.sum(image) != self.last_image_sum: 
-                    self.last_image_sum = np.sum(image)
+                image_sum = np.sum(image)
+                if image_sum != self.last_image_sum: 
+                    self.last_image_sum = image_sum
                     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
                     cv2.imwrite(filename, gray)
