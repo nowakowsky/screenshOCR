@@ -4,26 +4,14 @@
 
 ### It uses Tesseract OCR v5.0.0.
 
-#### usage: screenshot.py [-h] [-m {0,1}] [-p PATH] [-c CORNERS] [-t TIME] [-o OUTPUT] [-l LANG] [-tp TENSORPATH]
+#### Examples:
+    screenshOCR.py -t 15 -s
+        Takes screenshot each 15s, save to .\\images\\ OCR to text.txt and include separator:
+    
+    screenshOCR.py -m 1 -c 0 0 300 300
+        OCR all files from .\\images\\ 300x300 square starting from upper left corner of each image
 
-optional arguments:
+### screenshotOCR.py -h 
+        for all available options
 
-  -h, --help            show this help message and exit
-  
-  -m {0,1}, --mode {0,1}
-                        0 for screenshot, 1 for files. Default is screenshot mode.
-                        
-  -p PATH, --path PATH  files path, default is .\images\
-  
-  -c CORNERS, --corners CORNERS
-                        Img corners required with files mode eg. -c '0 0 1920 1080'
-                        
-  -t TIME, --time TIME  Screenshot interval, default is 30s
-  
-  -o OUTPUT, --output OUTPUT
-                        output file, default is .\text.txt
-                        
-  -l LANG, --lang LANG  language, for codes check tesseract docs, default is polish
-  
-  -tp TESSERACTPATH, --tesseractpath TESSERACTPATH
-                        path to tesseract.exe, default is C:\Program Files\Tesseract-OCR\tesseract.exe
+
