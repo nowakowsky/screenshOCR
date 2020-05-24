@@ -8,7 +8,7 @@
 
 #### Examples:
     screenshOCR.py -t 15 -s
-        Takes screenshot each 15s, save to .\images\ OCR to text.txt and include separator:
+        Takes screenshot each 15s, save to .\images\ OCR to text.txt and include separator
     
     screenshOCR.py -m 1 -c 0 0 300 300
         OCR all files from .\images\ 300x300 square starting from upper left corner of each image
