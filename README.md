@@ -25,5 +25,5 @@ optional arguments:
                         
   -l LANG, --lang LANG  language, for codes check tesseract docs, default is polish
   
-  -tp TENSORPATH, --tensorpath TENSORPATH
+  -tp TESSERACTPATH, --tesseractpath TESSERACTPATH
                         path to tesseract.exe, default is C:\Program Files\Tesseract-OCR\tesseract.exe
