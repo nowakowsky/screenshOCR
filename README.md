@@ -1,6 +1,6 @@
 # screenshOCR
 
-# This software has been made to grab screenshot and OCR it to text file each -t seconds. It can also OCR all files from -path.
+# This software has been made to grab screenshot and OCR it to text file. It can also OCR all files from dir.
 
 It uses Tesseract OCR v5.0.0.
 
