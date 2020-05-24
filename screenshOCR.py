@@ -2,51 +2,60 @@ from models import screenshoter
 from time import sleep
 import argparse
 
-if __name__ == "__main__":
-    #deal with args
-    ap = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epilog='''\n
-        This software has been made to automate taking screenshot and OCRing to text file.
-        It is using Tesseract OCR v5.0.0
+ap = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epilog='''\n
+    This software has been made to automate taking screenshot and OCRing to text file.
+    It is using Tesseract OCR v5.0.0
 
-        Default is screenshot mode with 30s interval.
-        To run in files use -m 1 and -c (corners). ''')
-    ap.add_argument('-m', '--mode', choices=[0, 1], default=0, type=int, help="0 for screenshot, 1 for files. Default is screenshot mode.")
-    ap.add_argument('-p', '--path', help="files path, default is .\\images\\")
-    ap.add_argument('-c', '--corners', help="Img corners required with files mode eg. -c '0 0 1920 1080' ")
-    ap.add_argument('-t', '--time', type=int, help="Screenshot interval, default is 30s")
-    ap.add_argument('-o', '--output', help="output file, default is .\\text.txt")
-    ap.add_argument('-l', '--lang', help="language, for codes check tesseract docs, default is polish")
-    ap.add_argument('-tp', '--tesseractpath', help="path to tesseract.exe, default is C:\\Program Files\\Tesseract-OCR\\tesseract.exe")
-    args = vars(ap.parse_args())
+    Default is screenshot mode with 30s interval.
+    To run in files use -m 1 and -c (corners). 
     
-    #settings
-    a,b,c,d = 0,0,0,0
-    path = '.\\images\\' if args['path'] == None else args['path']
-    output_file = "text.txt" if args['output'] == None else args['output']
-    ocr_path = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" if args['tesseractpath'] == None else args['tesseractpath']
-    lang = 'pol' if args['lang'] == None else args['lang']
-    interval = 30 if args["time"] == None else int(args["time"])
+Examples:
+    screenshOCR.py -t 15 -s
+        Takes screenshot each 15s, save to .\\images\\ OCR to text.txt and include separator:
+    
+    screenshOCR.py -m 1 -c 0 0 300 300
+        OCR all files from .\\images\\ 300x300 square starting from upper left corner of each image
+        
+        ''')
+ap.add_argument('-m', '--mode', action='store_false', help="file mode")
+ap.add_argument('-p', '--path', default='.\\images\\',help="files path, default is .\\images\\")
+ap.add_argument('-c', '--corners', type=int, nargs=4, default=[0, 0, 0, 0], help="Img corners required with files mode eg. -c 0 0 1920 1080")
+ap.add_argument('-t', '--time', type=int, default=30, help="Screenshot interval, default is 30s")
+ap.add_argument('-o', '--output', default="text.txt", help="Output file, default is .\\text.txt")
+ap.add_argument('-l', '--lang', default="pol", help="Language code. Check Tesseract Docs for codes. Default is Polish.")
+ap.add_argument('-tp', '--tesseractpath', default="C:\\Program Files\\Tesseract-OCR\\tesseract.exe", help="path to tesseract.exe, default is C:\\Program Files\\Tesseract-OCR\\tesseract.exe")
+ap.add_argument('-d', '--delete', action='store_true', help="Delete screenshots (only screenshot mode)")
+ap.add_argument('-s', '--separator', action='store_true', help="Separate images in text file")
+args = vars(ap.parse_args())
 
-    #run app
-    def run(mode, path, ocr_path, output_file, a,b,c,d, lang):
-        if mode:
-            app = screenshoter(path=path, ocr_path=ocr_path, lang=lang, output_file=output_file)
-            while True:
-                app.read()
-                sleep(interval)
-        else:
-            try:
-                corners = args["corners"]
-                a,b,c,d = [int(i) for i in corners.split(" ")]
-                if c == 0 or d == 0:
-                    Exception("-c is required for file mode")
-                else:
-                    app = screenshoter(a=a, b=b, c=c, d=d, path=path, ocr_path=ocr_path, lang=lang, output_file=output_file)
-                    app.read_files()
-                    exit(0)
-            except Exception as e:
-                print (e)
-                exit(1)
+#run app
+def run(mode: bool, path: str, ocr_path: str, output_file: str, lang: str, interval: int, top_left_x: int, top_left_y: int, width: int, heigth: int, delete: bool, separator: bool):
+    if mode:
+        app = screenshoter(top_left_x=top_left_x, top_left_y=top_left_y, width=width, heigth=heigth, path=path, ocr_path=ocr_path, lang=lang, output_file=output_file, delete=delete, separator=separator)
+        while True:
+            app.start_screenshot()
+            sleep(interval)
+    else:
+        try:
+            if width == 0 or heigth == 0:
+                raise Exception("-c is required for files mode")
+            else:
+                app = screenshoter(top_left_x=top_left_x, top_left_y=top_left_y, width=width, heigth=heigth, path=path, ocr_path=ocr_path, lang=lang, output_file=output_file, delete=delete, separator=separator)
+                app.start_files()
+                exit(0)
+        except Exception as e:
+            print (e)
+            exit(1)
 
-    mode = not args['mode']
-    run(mode, path, ocr_path, output_file, a,b,c,d, lang)
+mode = args['mode']
+path = args['path']
+output_file = args['output']
+ocr_path = args['tesseractpath']
+lang = args['lang']
+interval = args["time"]
+top_left_x, top_left_y, width, heigth = args["corners"]
+delete = args['delete']
+separator = args['separator']
+
+if __name__ == "__main__":
+    run(mode, path, ocr_path, output_file, lang, interval, top_left_x, top_left_y, width, heigth, delete, separator)
