@@ -8,7 +8,7 @@ ap = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epil
     It is using Tesseract OCR v5.0.0
 
     Default is screenshot mode with 30s interval.
-    To run in files use -m 1 and -c (corners). 
+    To run in files use -m and -c left_corner_x left_corner_y width heigth. 
     
 Examples:
     screenshOCR.py -t 15 -s
