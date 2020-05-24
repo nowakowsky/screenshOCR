@@ -1,8 +1,10 @@
 # screenshOCR
 
-## This software has been made to take screenshots and OCR it to text file. It can also OCR all files from dir.
+### This software has been made to take screenshots and OCR it to text file. 
 
-### It uses Tesseract OCR v5.0.0.
+### It can also OCR all files from dir.
+
+### Using Tesseract OCR v5.0.0.
 
 #### Examples:
     screenshOCR.py -t 15 -s
