@@ -1,6 +1,6 @@
 # screenshOCR
 
-## This software has been made to grab screenshot and OCR it to text file. It can also OCR all files from dir.
+## This software has been made to take screenshots and OCR it to text file. It can also OCR all files from dir.
 
 ### It uses Tesseract OCR v5.0.0.
 
