@@ -11,7 +11,6 @@ import cv2
 
 class screenshoter:
     last_image_sum = 0
-    date_format = "%d_%m_%H_%M_%S" #this is used for file names
 
     def __init__(self, output_file: str, ocr_path: str, path: str, lang: str, top_left_x: int, top_left_y: int, width: int, heigth: int, delete: bool, separator: bool):
         if width == 0 or heigth == 0: #screenshot mode
@@ -30,15 +29,15 @@ class screenshoter:
         self.separator=separator
 
     def _takeScreenshot(self):
-        filename = f'{datetime.now():date_format}_tmp.png'
+        filename = f'{datetime.now():%d_%m_%H_%M_%S}_tmp.png'
         im = ImageGrab.grab(bbox=(self.top_left_x,self.top_left_y,self.width,self.heigth))
-        file_with_path = self.path + filename + ".png"
+        file_with_path = self.path + filename
         im.save(file_with_path)
         return file_with_path
 
     def start_screenshot(self):
         with open(self.output_file, "a",encoding='utf8') as f:
-            filename = f'{datetime.now():date_format}_tmp.png'
+            filename = f'{datetime.now():%d_%m_%H_%M_%S}_tmp.png'
             screenshot = self._takeScreenshot()
             image = cv2.imread(screenshot)
             image_sum = np.sum(image)
@@ -57,6 +56,7 @@ class screenshoter:
                 if self.separator:
                     mark = "#" * 10
                     f.write("\n\n\n" + mark + " END OF IMAGE " + mark + "\n\n\n")
+                print (text) #write to console TO DO argument to disable this
                 logging.info("Text saved")
             else:
                 logging.info("Skipping, image repeated")
@@ -69,7 +69,7 @@ class screenshoter:
             for image in files:
                 image = cv2.imread(self.path+image)
                 image = image[self.top_left_y:self.heigth, self.top_left_x:self.width]
-                filename=f'{datetime.now():date_format}_tmp.png'
+                filename=f'{datetime.now():%d_%m_%H_%M_%S}_tmp.png'
 
                 image_sum = np.sum(image)
                 if image_sum != self.last_image_sum: 
@@ -84,6 +84,7 @@ class screenshoter:
                         mark = "#" * 10
                         f.write("\n\n\n" + mark + " END OF IMAGE " + mark + "\n\n\n")
                     os.remove(filename) #image used by ocr
+                    print (text) #write to console TO DO argument to disable this
                     logging.info("Text saved")
                 else:
                     logging.info("Skipping, image repeated")
